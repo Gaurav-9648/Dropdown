@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <link rel="icon" href="static/DepDropDown-master/favicon.ico">
+
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+
+<h1 class="text"> DropDown</h1>
+<div class="container" id="app">
+    <div class="row">
+    <form action="" method="post">{% csrf_token %}
+            <div class="col">
+                <label><b>Country :</b></label>
+                <select class="form-control form-control-sm mx-2 my-2 country" v-model="country_selected" @change="loadSt($event)" required>
+                    <option v-for="(p,i) in country" :key="i" :value="p">[[p.name]]</option>
+                </select>
+            </div>
+        <div class="col">
+            <label><b>States :</b></label>
+            <select class="form-control form-control-sm mx-2  my-2 states"  v-model="state_selected" @change="loadDis($event)" required>
+             <option v-for="(p,i) in st" :key="i" :value="p">[[p.name]]</option>
+
+            </select>
+        </div>
+        <div class="col">
+            <label><b>District :</b></label>
+            <select class="form-control form-control-sm  mx-2  my-2 district" v-model="district_selected" @change="loadCt($event)" required>
+                <option v-for="(p,i) in dis" :key="i" :value="p">[[p.name]]</option>
+            </select>
+        </div>
+        <div class="col">
+            <label><b>Cities :</b></label>
+            <select class="form-control form-control-sm  mx-2 my-2 cities" required>
+                <option v-for="(p,i) in ct" :key="i" :value="p">[[p.name]]</option>
+            </select>
+        </div>
+        <button type="submit" onclick="alert('Submitted Successfully!')">Submit</button>
+    </form>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+var app = new Vue({
+    el:"#app",
+    delimiters: ['[[', ']]'],
+    data:{
+        country: {{country_list|safe}},
+        state: {{state_list|safe}},
+        district: {{district_list|safe}},
+        citie: {{citie_list|safe}},
+
+        country_selected: "",
+        st:[],
+        state_selected: "",
+        dis:[],
+        district_selected: "",
+        ct:[],
+
+
+    },
+    mounted: function(){
+        console.log("Mounted");  
+    },
+    methods:{ 
+        loadSt(){
+            this.st=[];
+            for(let i=0; i< this.state.length; i++){
+                if(this.country_selected.name==this.state[i].country__name){
+                    this.st.push({name:this.state[i].name});
+                }
+            }
+            this.loadDis();
+            this.loadCt();
+        },
+        loadDis(){
+            this.dis=[];
+            for(let i=0; i< this.district.length; i++){
+                if(this.state_selected.name==this.district[i].state__name){
+                    this.dis.push({name:this.district[i].name});
+                }
+            }
+            this.loadCt();
+        },
+        loadCt(){
+            this.ct=[];
+            for(let i=0; i< this.citie.length; i++){
+                if(this.district_selected.name==this.citie[i].district__name){
+                    this.ct.push({name:this.citie[i].name});
+                }
+            }
+        },
+
+    },
+})
+
+
+
+</script>
+</body>
+</html>
